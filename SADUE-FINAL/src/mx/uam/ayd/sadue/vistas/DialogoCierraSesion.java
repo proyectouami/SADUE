@@ -39,7 +39,7 @@ public class DialogoCierraSesion extends JDialog {
 			JButton btnAceptar = new JButton("Aceptar");
 			btnAceptar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					app.inicia();
+					app.inicia(null);
 					dispose();
 				}
 			});
