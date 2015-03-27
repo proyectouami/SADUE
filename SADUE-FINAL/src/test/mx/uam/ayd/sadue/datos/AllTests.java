@@ -9,6 +9,7 @@ public class AllTests {
 		TestSuite suite = new TestSuite(AllTests.class.getName());
 		//$JUnit-BEGIN$
 		suite.addTestSuite(DAOProductosTest.class);
+		suite.addTestSuite(DAOUsuariosTest.class);
 		//$JUnit-END$
 		return suite;
 	}
