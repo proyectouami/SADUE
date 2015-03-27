@@ -3,6 +3,7 @@ package mx.uam.ayd.sadue.negocio;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
+import mx.uam.ayd.sadue.datos.ConexionDB;
 import mx.uam.ayd.sadue.datos.DAOApartados;
 import mx.uam.ayd.sadue.datos.DAOProductos;
 import mx.uam.ayd.sadue.datos.DAOProductosApartados;
@@ -12,7 +13,7 @@ import mx.uam.ayd.sadue.modelo.ProductoApartado;
 import mx.uam.ayd.sadue.vistas.VistaApartar;
 
 public class ServicioApartar {
-	
+	ConexionDB conexion;
 	private DAOApartados apartados;
 	private DAOProductosApartados productosAp;
 	private Apartado apartado;
@@ -22,18 +23,15 @@ public class ServicioApartar {
 	private ArrayList<String> apartadoArreglo = new ArrayList<String>(8);
 	private ArrayList<String> productoArreglo = new ArrayList<String>(4);
 	
-	public ServicioApartar(){
-		
-	}
-	
-	public ServicioApartar(DAOApartados ap){
+	public ServicioApartar(DAOApartados ap,ConexionDB cone){
+		conexion=cone;
 		apartados = ap;
 	}
 	
 	//Inicia la vista
 	public void inicia(){
 		System.out.println("Metodo que inicia la VistaSistemaApartado");
-		VistaApartar ventanaAp = new VistaApartar(this);
+		VistaApartar ventanaAp = new VistaApartar(this,conexion);
 		ventanaAp.setVisible(true);
 	}
 	
@@ -74,7 +72,7 @@ public class ServicioApartar {
 				String.valueOf(apartadoArreglo.get(3)), String.valueOf(apartadoArreglo.get(4)), Long.parseLong(apartadoArreglo.get(5)),
 				Long.parseLong(apartadoArreglo.get(6)), String.valueOf(apartadoArreglo.get(7)), Double.parseDouble(apartadoArreglo.get(8)),
 				cuenta1, deuda1);
-		apartados = new DAOApartados();
+		apartados = new DAOApartados(conexion);
 		//se genera el apartado en la base de datos
 		apartados.agregaApartado(apartado);
 		
@@ -95,11 +93,11 @@ public class ServicioApartar {
 			//ese parámetro asocia al arreglo de productos con el apartado
 			producto = new ProductoApartado(apartados.dameId(nombre, tarjeta, total), Integer.parseInt(productoArreglo.get(0)),String.valueOf(productoArreglo.get(1)),
 					Double.parseDouble(productoArreglo.get(4)),	String.valueOf(productoArreglo.get(3)), String.valueOf(productoArreglo.get(2)), Integer.parseInt((productoArreglo.get(5))));
-			productosAp = new DAOProductosApartados();
+			productosAp = new DAOProductosApartados(conexion);
 			//se agregan los productos a la base de datos
 			productosAp.agregaProducto(producto, apartado);
 			//Actualiza existencias de cada producto apartado
-			pr = new DAOProductos();
+			pr = new DAOProductos(conexion);
 			int exististencia;
 			exististencia = pr.dameExistencia(Integer.parseInt(productoArreglo.get(0)), String.valueOf(productoArreglo.get(2)), String.valueOf(productoArreglo.get(3)));
 			

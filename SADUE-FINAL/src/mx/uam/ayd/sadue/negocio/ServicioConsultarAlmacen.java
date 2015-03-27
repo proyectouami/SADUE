@@ -3,14 +3,17 @@ package mx.uam.ayd.sadue.negocio;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
+import mx.uam.ayd.sadue.datos.ConexionDB;
 import mx.uam.ayd.sadue.datos.DAOProductos;
 import mx.uam.ayd.sadue.modelo.Producto;
 import mx.uam.ayd.sadue.vistas.VistaConsultarAlmacen;
 
 public class ServicioConsultarAlmacen {
+	ConexionDB conexion;
 	DAOProductos daoProductos;
 	
-	public ServicioConsultarAlmacen(DAOProductos p){
+	public ServicioConsultarAlmacen(DAOProductos p,ConexionDB cone){
+		conexion=cone;
 		daoProductos = p;
 	}
 
@@ -57,7 +60,7 @@ public class ServicioConsultarAlmacen {
 	
 	public void cambiarPrecio(int id, String uniforme, String escuela, String talla, int cantidad){
 		System.out.println("Inicia clase \"Apartar\"");
-		ServicioCambioPrecio servicioCp = new ServicioCambioPrecio(daoProductos);
+		ServicioCambioPrecio servicioCp = new ServicioCambioPrecio(daoProductos,conexion);
 		servicioCp.recibeId(id, uniforme, escuela, talla, cantidad);
 		servicioCp.inicia();
 	}

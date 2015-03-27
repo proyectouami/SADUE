@@ -14,6 +14,7 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.JButton;
 
+import mx.uam.ayd.sadue.datos.ConexionDB;
 import mx.uam.ayd.sadue.fonts.CustomFont;
 import mx.uam.ayd.sadue.modelo.Producto;
 import mx.uam.ayd.sadue.negocio.ServicioApartar;
@@ -41,9 +42,10 @@ public class VistaApartar extends JDialog {
 	/**
 	 * 
 	 */
+	ConexionDB conexion;
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private ServicioSeleccionUniformesApartar ssua = new ServicioSeleccionUniformesApartar(null);
+	private ServicioSeleccionUniformesApartar ssua = new ServicioSeleccionUniformesApartar(null,conexion);
 	private VistaSeleccionUniformesApartar vsua;
 	private ServicioApartar servicioApr;
 	private JTextField textFNombre;
@@ -82,7 +84,8 @@ public class VistaApartar extends JDialog {
 	/**
 	 * Create the frame.
 	 */
-	public VistaApartar(final ServicioApartar servicioAp) {
+	public VistaApartar(final ServicioApartar servicioAp,ConexionDB cone) {
+		conexion=cone;
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 720, 600);//mod
@@ -98,7 +101,7 @@ public class VistaApartar extends JDialog {
 		
 		CustomFont cf = new CustomFont();
 		final Calendar c = new GregorianCalendar();
-        final ServicioApartar servap = new ServicioApartar();
+        final ServicioApartar servap = new ServicioApartar(null,conexion);
 		
 		JSeparator separator = new JSeparator();
 		separator.setBounds(33, 161, 647, 2);
@@ -305,7 +308,7 @@ public class VistaApartar extends JDialog {
     			
         		
         		String[] fila = new String[7];
-        		vsua = new VistaSeleccionUniformesApartar(null);
+        		vsua = new VistaSeleccionUniformesApartar(null,conexion);
         		try{
         			
                     //Intentanmos validar si el objeto productos equivale a vacio.  
@@ -403,7 +406,7 @@ public class VistaApartar extends JDialog {
 						prod = "";
 					}
 					//Se hace el apartado
-					servicioApr = new ServicioApartar(null);
+					servicioApr = new ServicioApartar(null,conexion);
 					servicioApr.realizarApartado(0,apart,prods);
 					apartId = servicioApr.dameIdApartado(textFNombre.getText(), Long.parseLong(textFTarjeta.getText()), totalPagar);
 					dialogoApartadoRealizado();
@@ -551,7 +554,7 @@ public class VistaApartar extends JDialog {
 	}
 	
 	public void dialogoApartadoRealizado(){
-		DialogoApartadoRealizado dialogo = new DialogoApartadoRealizado();
+		DialogoApartadoRealizado dialogo = new DialogoApartadoRealizado(conexion);
 		dialogo.setVisible(true);
 	}
 }

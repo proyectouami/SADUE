@@ -8,12 +8,15 @@ import java.util.ArrayList;
 import mx.uam.ayd.sadue.modelo.Venta;
 
 public class DAOVenta {
+	ConexionDB conexion;
+	private String query;
+	private ResultSet rs;
 
 	/**
 	 * Constructor de la clase
 	 */
-	public DAOVenta() {
-
+	public DAOVenta(ConexionDB cone) {
+		conexion=cone;
 	}
 
 	/**
@@ -26,11 +29,14 @@ public class DAOVenta {
 
 		try {
 			// Crea el statement
-			Statement statement = ManejadorBD.dameConnection().createStatement();
-
+			//Statement statement = ManejadorBD.dameConnection().createStatement();
+			query="insert into Ventas values (DEFAULT,'"+venta.dameNombreCliente()+"','"+venta.dameApellidoCliente()+"','"+venta.dameFechaInicio()+"',"+venta.dameTipoPago()+","+venta.damePagoTotal()+")";
 			// Envia instruccion SQL, nota el DEFAULT es para insertar la llave 
-			statement.execute("insert into Ventas values (DEFAULT,'"+venta.dameNombreCliente()+"','"+venta.dameApellidoCliente()+"','"+venta.dameFechaInicio()+"',"+venta.dameTipoPago()+","+venta.damePagoTotal()+")",Statement.RETURN_GENERATED_KEYS);
-			ResultSet rs = statement.getGeneratedKeys(); // Recupera la llave
+			//statement.execute("insert into Ventas values (DEFAULT,'"+venta.dameNombreCliente()+"','"+venta.dameApellidoCliente()+"','"+venta.dameFechaInicio()+"',"+venta.dameTipoPago()+","+venta.damePagoTotal()+")",Statement.RETURN_GENERATED_KEYS);
+			//ResultSet rs = statement.getGeneratedKeys(); // Recupera la llave
+			conexion.ejecutarSQL(query);
+			query="select * from Apartados";
+			rs=conexion.ejecutarSQLSelect(query);
 			if (rs != null && rs.next()) {
 			    llave = rs.getInt(1);
 			    venta.cambiaId(llave); // Asigna la llave al producto
@@ -78,11 +84,11 @@ public class DAOVenta {
 
 		try {
 			// Crea el statement
-			Statement statement = ManejadorBD.dameConnection().createStatement();
-
+			//Statement statement = ManejadorBD.dameConnection().createStatement();
+			query="SELECT * FROM Ventas WHERE fecha='"+fecha+"' AND claveVenta='"+claveVenta+"'";
 			// Recibe los resutados
-			ResultSet rs = statement.executeQuery("SELECT * FROM Ventas WHERE fecha='"+fecha+"' AND claveVenta='"+claveVenta+"'");
-
+			//ResultSet rs = statement.executeQuery("SELECT * FROM Ventas WHERE fecha='"+fecha+"' AND claveVenta='"+claveVenta+"'");
+			rs=conexion.ejecutarSQLSelect(query);
 			if(rs.next())
 			{
 				// Crea una nueva instancia del objeto
@@ -101,11 +107,11 @@ public class DAOVenta {
 
 		try {
 			// Crea el statement
-			Statement statement = ManejadorBD.dameConnection().createStatement();
-
+			//Statement statement = ManejadorBD.dameConnection().createStatement();
+			query="SELECT * FROM Ventas WHERE ventaId="+claveVenta;
 			// Recibe los resutados
-			ResultSet rs = statement.executeQuery("SELECT * FROM Ventas WHERE ventaId="+claveVenta);
-
+			//ResultSet rs = statement.executeQuery("SELECT * FROM Ventas WHERE ventaId="+claveVenta);
+			rs=conexion.ejecutarSQLSelect(query);
 			if(rs.next())
 			{
 				// Crea una nueva instancia del objeto
@@ -129,11 +135,11 @@ public class DAOVenta {
 
 		try {
 			// Crea el statement
-			Statement statement = ManejadorBD.dameConnection().createStatement();
-
+			//Statement statement = ManejadorBD.dameConnection().createStatement();
+			query="SELECT * FROM Ventas WHERE fechaInicio= "+fechInicio+"AND fechaFin= "+fechFin;
 			// Recibe los resutados
-			ResultSet rs = statement.executeQuery("SELECT * FROM Ventas WHERE fechaInicio= "+fechInicio+"AND fechaFin= "+fechFin);
-
+			//ResultSet rs = statement.executeQuery("SELECT * FROM Ventas WHERE fechaInicio= "+fechInicio+"AND fechaFin= "+fechFin);
+			rs=conexion.ejecutarSQLSelect(query);
 			while(rs.next())
 			{
 				// Crea una nueva instancia del objeto
@@ -156,10 +162,11 @@ public int dameId(String nombre,  double pago){
 		
 		try {
 			// Crea el statement
-			Statement statement = ManejadorBD.dameConnection().createStatement();
-
+			//Statement statement = ManejadorBD.dameConnection().createStatement();
+			query="SELECT apartadoId FROM Apartados WHERE nombreCliente='" + nombre + "'AND totalPagar=" + pago;
 			// Recibe los resutados
-			ResultSet rs = statement.executeQuery("SELECT apartadoId FROM Apartados WHERE nombreCliente='" + nombre + "'AND totalPagar=" + pago);
+			//ResultSet rs = statement.executeQuery("SELECT apartadoId FROM Apartados WHERE nombreCliente='" + nombre + "'AND totalPagar=" + pago);
+			rs=conexion.ejecutarSQLSelect(query);
 			if (rs.next()) {
 		        return rs.getInt(1);
 		    }
@@ -179,10 +186,11 @@ public int dameId(String nombre,  double pago){
 	public int cuantasVentas(String fechInicio, String fechFin) {
 		try {
 			// Crea el statement
-			Statement statement = ManejadorBD.dameConnection().createStatement();
-
+			//Statement statement = ManejadorBD.dameConnection().createStatement();
+			query="SELECT COUNT(*) FROM Ventas WHERE fechaInicio= "+fechInicio+"AND fechaFin= "+fechFin;
 			// Recibe los resutados
-			ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM Ventas WHERE fechaInicio= "+fechInicio+"AND fechaFin= "+fechFin);
+			//ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM Ventas WHERE fechaInicio= "+fechInicio+"AND fechaFin= "+fechFin);
+			rs=conexion.ejecutarSQLSelect(query);
 			if (rs.next()) {
 		        return rs.getInt(1);
 		    }

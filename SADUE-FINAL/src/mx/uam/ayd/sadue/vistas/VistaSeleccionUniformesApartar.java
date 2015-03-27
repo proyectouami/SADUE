@@ -21,13 +21,14 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+import mx.uam.ayd.sadue.datos.ConexionDB;
 import mx.uam.ayd.sadue.fonts.CustomFont;
 import mx.uam.ayd.sadue.modelo.Escuela;
 import mx.uam.ayd.sadue.modelo.Producto;
 import mx.uam.ayd.sadue.negocio.ServicioSeleccionUniformesApartar;
 
 public class VistaSeleccionUniformesApartar extends JDialog{
-
+	ConexionDB conexion;
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JScrollPane jScrollPane1;
@@ -42,14 +43,15 @@ public class VistaSeleccionUniformesApartar extends JDialog{
 	private JComboBox<Integer> comboBoxCantidad;
 	private JLabel lblSeleccionaUnaEscuela;
 	private JTable table;
-	private ServicioSeleccionUniformesApartar servA = new ServicioSeleccionUniformesApartar(null);
+	private ServicioSeleccionUniformesApartar servA = new ServicioSeleccionUniformesApartar(null,conexion);
 	
 	private JButton btnAceptar;
 
 	/**
 	 * Create the frame.
 	 */
-	public VistaSeleccionUniformesApartar(final ServicioSeleccionUniformesApartar servicios) {
+	public VistaSeleccionUniformesApartar(final ServicioSeleccionUniformesApartar servicio,ConexionDB cone) {
+		conexion=cone;
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setModal(true);
 		setTitle("Seleccionar Uniformes");

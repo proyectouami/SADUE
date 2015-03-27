@@ -8,12 +8,17 @@ import java.util.ArrayList;
 import mx.uam.ayd.sadue.modelo.Usuario;
 
 public class DAOUsuarios {
+	ConexionDB conexion;
+	private String query;
+	private ResultSet rs;
+
 	
 	static int user;
 	/**
 	 * Constructor de la clase
 	 */
-	public DAOUsuarios() {
+	public DAOUsuarios(ConexionDB cone) {
+		conexion=cone;
 
 	}
 
@@ -27,11 +32,14 @@ public class DAOUsuarios {
 
 		try {
 			// Crea el statement
-			Statement statement = ManejadorBD.dameConnection().createStatement();
-
+			//Statement statement = ManejadorBD.dameConnection().createStatement();
+			query="insert into Usuarios values (DEFAULT,'"+usuario.dameUsuario()+"','"+usuario.damePassword()+"',"+usuario.dameTipoUsuario()+")";
 			// Envia instruccion SQL, nota el DEFAULT es para insertar la llave autogenerada
-			statement.execute("insert into Usuarios values (DEFAULT,'"+usuario.dameUsuario()+"','"+usuario.damePassword()+"',"+usuario.dameTipoUsuario()+")",Statement.RETURN_GENERATED_KEYS);
-			ResultSet rs = statement.getGeneratedKeys(); // Recupera la llave
+			//statement.execute("insert into Usuarios values (DEFAULT,'"+usuario.dameUsuario()+"','"+usuario.damePassword()+"',"+usuario.dameTipoUsuario()+")",Statement.RETURN_GENERATED_KEYS);
+			//ResultSet rs = statement.getGeneratedKeys(); // Recupera la llave
+			conexion.ejecutarSQL(query);
+			query="select * from Apartados";
+			rs=conexion.ejecutarSQLSelect(query);
 			if (rs != null && rs.next()) {
 			    llave = rs.getInt(1);
 			    usuario.cambiaId(llave); // Asigna la llave al autor
@@ -52,23 +60,15 @@ public class DAOUsuarios {
 	public boolean quitaUsuario(Usuario usuario) {
 
 		int resultado = 0;
+		boolean valida;
 
-		try {
-			// Crea el statement
-			Statement statement = ManejadorBD.dameConnection().createStatement();
-
-			// Recibe los resutados
-			resultado = statement.executeUpdate("DELETE FROM Usuarios WHERE usuario='"+usuario.dameUsuario()+"' AND password='"+usuario.damePassword()+"' AND tipoUsuario="+usuario.dameTipoUsuario());
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		if(resultado == 0) {
-			return false;
-		} else {
-			return true;
-		}
+		// Crea el statement
+		//Statement statement = ManejadorBD.dameConnection().createStatement();
+		query="DELETE FROM Usuarios WHERE usuario='"+usuario.dameUsuario()+"' AND password='"+usuario.damePassword()+"' AND tipoUsuario="+usuario.dameTipoUsuario();
+		// Recibe los resutados
+		//resultado = statement.executeUpdate("DELETE FROM Usuarios WHERE usuario='"+usuario.dameUsuario()+"' AND password='"+usuario.damePassword()+"' AND tipoUsuario="+usuario.dameTipoUsuario());
+		valida=conexion.ejecutarSQL(query);
+		return valida;
 
 	}
 
@@ -78,11 +78,11 @@ public class DAOUsuarios {
 
 		try {
 			// Crea el statement
-			Statement statement = ManejadorBD.dameConnection().createStatement();
-
+			//Statement statement = ManejadorBD.dameConnection().createStatement();
+			query="SELECT * FROM Usuarios WHERE usuario='"+usuario+"'";
 			// Recibe los resutados
-			ResultSet rs = statement.executeQuery("SELECT * FROM Usuarios WHERE usuario='"+usuario+"'");
-
+			//ResultSet rs = statement.executeQuery("SELECT * FROM Usuarios WHERE usuario='"+usuario+"'");
+			rs=conexion.ejecutarSQLSelect(query);
 			if(rs.next())
 			{
 				// Crea una nueva instancia del objeto
@@ -107,11 +107,11 @@ public class DAOUsuarios {
 
 		try {
 			// Crea el statement
-			Statement statement = ManejadorBD.dameConnection().createStatement();
-
+			//Statement statement = ManejadorBD.dameConnection().createStatement();
+			query="SELECT * FROM Usuarios WHERE usuario='"+usuario+"' AND password='"+password+"'";
 			// Recibe los resutados
-			ResultSet rs = statement.executeQuery("SELECT * FROM Usuarios WHERE usuario='"+usuario+"' AND password='"+password+"'");
-
+			//ResultSet rs = statement.executeQuery("SELECT * FROM Usuarios WHERE usuario='"+usuario+"' AND password='"+password+"'");
+			rs=conexion.ejecutarSQLSelect(query);
 			if(rs.next())
 			{
 				// Crea una nueva instancia del objeto
@@ -136,11 +136,11 @@ public class DAOUsuarios {
 
 		try {
 			// Crea el statement
-			Statement statement = ManejadorBD.dameConnection().createStatement();
-
+			//Statement statement = ManejadorBD.dameConnection().createStatement();
+			query="SELECT * FROM Usuarios WHERE usuario='"+usuario+"' AND password='"+password+"'";
 			// Recibe los resutados
-			ResultSet rs = statement.executeQuery("SELECT * FROM Usuarios WHERE usuario='"+usuario+"' AND password='"+password+"'");
-
+			//ResultSet rs = statement.executeQuery("SELECT * FROM Usuarios WHERE usuario='"+usuario+"' AND password='"+password+"'");
+			rs=conexion.ejecutarSQLSelect(query);
 			if(rs.next())
 			{
 				// Crea una nueva instancia del objeto
@@ -162,11 +162,11 @@ public class DAOUsuarios {
 
 		try {
 			// Crea el statement
-			Statement statement = ManejadorBD.dameConnection().createStatement();
-
+			//Statement statement = ManejadorBD.dameConnection().createStatement();
+			query="SELECT * FROM Usuarios WHERE usuarioId="+id;
 			// Recibe los resutados
-			ResultSet rs = statement.executeQuery("SELECT * FROM Usuarios WHERE usuarioId="+id);
-
+			//ResultSet rs = statement.executeQuery("SELECT * FROM Usuarios WHERE usuarioId="+id);
+			rs=conexion.ejecutarSQLSelect(query);
 			if(rs.next())
 			{
 				// Crea una nueva instancia del objeto
@@ -189,9 +189,11 @@ public class DAOUsuarios {
 		ArrayList <Usuario> usuariosTemp = new ArrayList <Usuario>();
 		try {
 			// Crea el statement
-			Statement statement = ManejadorBD.dameConnection().createStatement();
+			//Statement statement = ManejadorBD.dameConnection().createStatement();
+			query="SELECT * FROM Usuarios";
 			// Recibe los resutados
-			ResultSet rs = statement.executeQuery("SELECT * FROM Usuarios");
+			//ResultSet rs = statement.executeQuery("SELECT * FROM Usuarios");
+			rs=conexion.ejecutarSQLSelect(query);
 			while(rs.next()){
 				// Crea una nueva instancia del objeto
 				Usuario usuario = new Usuario(rs.getString("usuario"), rs.getString("password"), rs.getInt("tipoUsuario"));
@@ -214,11 +216,11 @@ public class DAOUsuarios {
 
 		try {
 			// Crea el statement
-			Statement statement = ManejadorBD.dameConnection().createStatement();
-
+			//Statement statement = ManejadorBD.dameConnection().createStatement();
+			query="SELECT * FROM Usuarios WHERE usuario='"+usuario+"'";
 			// Recibe los resutados
-			ResultSet rs = statement.executeQuery("SELECT * FROM Usuarios WHERE usuario='"+usuario+"'");
-
+			//ResultSet rs = statement.executeQuery("SELECT * FROM Usuarios WHERE usuario='"+usuario+"'");
+			rs=conexion.ejecutarSQLSelect(query);
 			if(rs.next())
 			{
 				// Crea una nueva instancia del objeto
@@ -238,10 +240,11 @@ public class DAOUsuarios {
 	public int cuantosUsuarios() {
 		try {
 			// Crea el statement
-			Statement statement = ManejadorBD.dameConnection().createStatement();
-
+			//Statement statement = ManejadorBD.dameConnection().createStatement();
+			query="SELECT COUNT(*) FROM Usuarios";
 			// Recibe los resutados
-			ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM Usuarios");
+			//ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM Usuarios");
+			rs=conexion.ejecutarSQLSelect(query);
 			if (rs.next()) {
 		        return rs.getInt(1);
 		    }

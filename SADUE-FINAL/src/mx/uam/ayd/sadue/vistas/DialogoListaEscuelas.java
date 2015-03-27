@@ -20,13 +20,15 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 
+import mx.uam.ayd.sadue.datos.ConexionDB;
 import mx.uam.ayd.sadue.fonts.CustomFont;
 import mx.uam.ayd.sadue.modelo.Escuela;
 import mx.uam.ayd.sadue.negocio.ServicioListaEscuelas;
+
 import javax.swing.UIManager;
 
 public class DialogoListaEscuelas extends JDialog {
-
+	ConexionDB conexion;
 	private static final long serialVersionUID = 1L;
 	private JPanel jContentPane = null;
 	private JList jListEscuelas = null;
@@ -42,8 +44,9 @@ public class DialogoListaEscuelas extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public DialogoListaEscuelas(final ServicioListaEscuelas servicioLE) {
+	public DialogoListaEscuelas(final ServicioListaEscuelas servicioLE,ConexionDB cone) {
 		// TODO Auto-generated constructor stub
+		conexion=cone;
 		initialize();
 		escuelas = servicioLE.buscarEscuela();
 		for(Escuela u:escuelas) {
@@ -145,7 +148,7 @@ public class DialogoListaEscuelas extends JDialog {
 				public void actionPerformed(ActionEvent arg0) {
 					String esc;
 					esc = String.valueOf(jListEscuelas.getSelectedValue());
-					servicioLE = new ServicioListaEscuelas(null);
+					servicioLE = new ServicioListaEscuelas(null,conexion);
 					System.out.println(esc);
 					servicioLE.eliminarEscuela(esc);
 					model.removeElement(jListEscuelas.getSelectedValue());

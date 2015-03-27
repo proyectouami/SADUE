@@ -8,25 +8,31 @@ import javax.swing.JDialog;
 import javax.swing.JList;
 import javax.swing.JPanel;
 
+import mx.uam.ayd.sadue.datos.ConexionDB;
 import mx.uam.ayd.sadue.fonts.CustomFont;
 import mx.uam.ayd.sadue.modelo.Usuario;
 import mx.uam.ayd.sadue.negocio.ServicioListaUsuarios;
 
 import java.awt.Color;
+
 import javax.swing.JScrollPane;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
 import javax.swing.JLabel;
+
 import java.awt.SystemColor;
+
 import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
 
 
 
 public class DialogoListaUsuarios extends JDialog {
-
+	ConexionDB conexion;
 	private static final long serialVersionUID = 1L;
 	private JPanel jContentPane = null;
 	private JList jListUsuarios = null;
@@ -42,8 +48,9 @@ public class DialogoListaUsuarios extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public DialogoListaUsuarios(final ServicioListaUsuarios servicioLU) {
+	public DialogoListaUsuarios(final ServicioListaUsuarios servicioLU,ConexionDB cone) {
 		// TODO Auto-generated constructor stub
+		conexion=cone;
 		initialize();
 		usuarios = servicioLU.buscarUsuario();
 		for(Usuario u:usuarios) {
@@ -142,7 +149,7 @@ public class DialogoListaUsuarios extends JDialog {
 				public void actionPerformed(ActionEvent arg0) {
 					String usr;
 					usr = String.valueOf(jListUsuarios.getSelectedValue());
-					servicioLU = new ServicioListaUsuarios(null);
+					servicioLU = new ServicioListaUsuarios(null,conexion);
 					System.out.println(usr);
 					servicioLU.eliminarUsuario(usr);
 					model.removeElement(jListUsuarios.getSelectedValue());

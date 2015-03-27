@@ -24,10 +24,12 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+import mx.uam.ayd.sadue.datos.ConexionDB;
 import mx.uam.ayd.sadue.fonts.CustomFont;
 import mx.uam.ayd.sadue.modelo.Producto;
 import mx.uam.ayd.sadue.negocio.ServicioNuevaVenta;
 import mx.uam.ayd.sadue.negocio.ServicioSeleccionUniformesApartar;
+
 import javax.swing.JCheckBox;
 
 public class VistaNuevaVenta extends JDialog {
@@ -35,9 +37,10 @@ public class VistaNuevaVenta extends JDialog {
 	/**
 	 * 
 	 */
+	ConexionDB conexion;
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private ServicioSeleccionUniformesApartar ssua = new ServicioSeleccionUniformesApartar(null);
+	private ServicioSeleccionUniformesApartar ssua = new ServicioSeleccionUniformesApartar(null,conexion);
 	private VistaSeleccionUniformesApartar vsua;
 	private ServicioNuevaVenta servicioNuVe;
 	private JTextField textFNombre;
@@ -69,7 +72,8 @@ public class VistaNuevaVenta extends JDialog {
 	/**
 	 * Create the frame.
 	 */
-	public VistaNuevaVenta(final ServicioNuevaVenta servicioNV) {
+	public VistaNuevaVenta(final ServicioNuevaVenta servicioNV,ConexionDB cone) {
+		conexion=cone;
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 720, 570);
@@ -208,7 +212,7 @@ public class VistaNuevaVenta extends JDialog {
         		chckbxEfectivo.setSelected(false);
                 chckbxElectronico.setSelected(false);        		
         		String[] fila = new String[7];
-        		vsua = new VistaSeleccionUniformesApartar(null);
+        		vsua = new VistaSeleccionUniformesApartar(null,conexion);
         		try{
         			
                     //Intentanmos validar si el objeto productos equivale a vacio.  
@@ -303,9 +307,9 @@ public class VistaNuevaVenta extends JDialog {
 						prod = "";
 					}
 					//Se hace la venta
-					servicioNuVe = new ServicioNuevaVenta(null);
+					servicioNuVe = new ServicioNuevaVenta(null,conexion);
 					servicioNuVe.agregarVenta(0,apart,prods);
-					DialogoFormaDeCobro dFP = new DialogoFormaDeCobro();
+					DialogoFormaDeCobro dFP = new DialogoFormaDeCobro(conexion);
 					dFP.setVisible(true);
 					dispose();
 				}

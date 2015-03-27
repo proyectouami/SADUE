@@ -1,5 +1,6 @@
 package mx.uam.ayd.sadue.vistas;
 import java.awt.Color;
+
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -8,13 +9,17 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+
+import mx.uam.ayd.sadue.datos.ConexionDB;
 import mx.uam.ayd.sadue.fonts.CustomFont;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 public class DialogoFormaDeCobro extends JDialog {
 	/**
 	 * 
 	 */
+	ConexionDB conexion;
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField textField;
@@ -25,7 +30,8 @@ public class DialogoFormaDeCobro extends JDialog {
 	/**
 	 * Aqui se crea la vista para generar una forma de pago.
 	 */
-	public DialogoFormaDeCobro() {
+	public DialogoFormaDeCobro(ConexionDB cone) {
+		conexion=cone;
 		setBounds(100, 100, 520, 254);
 		setModal(true);
 		setTitle("Forma de Pago");
@@ -71,7 +77,7 @@ public class DialogoFormaDeCobro extends JDialog {
 		contentPane.add(textField_1);
 		textField_1.setColumns(10);
 		
-		vnv = new VistaNuevaVenta(null);
+		vnv = new VistaNuevaVenta(null,conexion);
 		if(vnv.valorCB() == 1){
 			textField_1.setText(String.valueOf(vnv.totalApagar()));
 		}

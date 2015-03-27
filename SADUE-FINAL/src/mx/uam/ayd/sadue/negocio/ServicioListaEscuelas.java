@@ -3,23 +3,25 @@ package mx.uam.ayd.sadue.negocio;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
+import mx.uam.ayd.sadue.datos.ConexionDB;
 import mx.uam.ayd.sadue.datos.DAOEscuelas;
 import mx.uam.ayd.sadue.modelo.Escuela;
 import mx.uam.ayd.sadue.vistas.DialogoListaEscuelas;
 
 public class ServicioListaEscuelas {
-
+	ConexionDB conexion;
 	private DAOEscuelas escuelas;
 	private Escuela esc;
 	private ArrayList<String> escuelaArreglo = new ArrayList<String>(3);
 	
-	public ServicioListaEscuelas(DAOEscuelas escuela){
+	public ServicioListaEscuelas(DAOEscuelas escuela,ConexionDB cone){
+		conexion=cone;
 		escuelas = escuela;
 	}
 	
 	public void inicia(){
 		System.out.println("Metodo inicia de la clase DialogoListaUsuarios");
-		DialogoListaEscuelas ventana = new DialogoListaEscuelas(this);
+		DialogoListaEscuelas ventana = new DialogoListaEscuelas(this,conexion);
 		ventana.setVisible(true); // En este momento aparece la ventana principal
 	}
 	
@@ -46,7 +48,7 @@ public class ServicioListaEscuelas {
 		}
 		
 		esc = new Escuela(clave,escuelaCadena);
-		escuelas = new DAOEscuelas();
+		escuelas = new DAOEscuelas(conexion);
 		if(escuelas.quitaEscuela(esc))
 			return true;
 		else

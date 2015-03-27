@@ -3,6 +3,7 @@ package mx.uam.ayd.sadue.negocio;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
+import mx.uam.ayd.sadue.datos.ConexionDB;
 import mx.uam.ayd.sadue.datos.DAOEscuelas;
 import mx.uam.ayd.sadue.datos.DAOProductos;
 import mx.uam.ayd.sadue.datos.DAOProductosVentidos;
@@ -13,18 +14,20 @@ import mx.uam.ayd.sadue.modelo.Venta;
 import mx.uam.ayd.sadue.vistas.VistaNuevaVenta;
 
 public class ServicioNuevaVenta {
+	ConexionDB conexion;
 	DAOVenta daoVenta;
-	DAOEscuelas daoEscuela = new DAOEscuelas();
-	DAOProductos daoProductos = new DAOProductos();
+	DAOEscuelas daoEscuela = new DAOEscuelas(conexion);
+	DAOProductos daoProductos = new DAOProductos(conexion);
 	private ArrayList<String> ventaArreglo = new ArrayList<String>();
 	private ArrayList<String> productoArreglo = new ArrayList<String>();
-	DAOProductosVentidos daoVentidos = new DAOProductosVentidos();
+	DAOProductosVentidos daoVentidos = new DAOProductosVentidos(conexion);
 
 	Producto producto;
 	Venta venta;
 
 	
-	public ServicioNuevaVenta(DAOVenta daoVent) {
+	public ServicioNuevaVenta(DAOVenta daoVent, ConexionDB cone) {
+		conexion=cone;
 		daoVenta = daoVent;
 	}
 	
@@ -33,7 +36,7 @@ public class ServicioNuevaVenta {
 	}
 	
 	public void inicia(){
-		VistaNuevaVenta vnVenta = new VistaNuevaVenta(this);
+		VistaNuevaVenta vnVenta = new VistaNuevaVenta(this,conexion);
 		vnVenta.setVisible(true);
 	}
 	
@@ -56,7 +59,7 @@ public class ServicioNuevaVenta {
 		
 		venta = new Venta(String.valueOf(ventaArreglo.get(0)),String.valueOf(ventaArreglo.get(1)),String.valueOf(ventaArreglo.get(2)),
 							Integer.parseInt(ventaArreglo.get(3)),Double.parseDouble(ventaArreglo.get(4)));
-		daoVenta = new DAOVenta();
+		daoVenta = new DAOVenta(conexion);
 		daoVenta.agregaVenta(venta);
 		
 		String p;
@@ -74,7 +77,7 @@ public class ServicioNuevaVenta {
 			daoVentidos.agregaProducto(producto);
 		}
 		
-		daoProductos = new DAOProductos();
+		daoProductos = new DAOProductos(conexion);
 		int exististencia;
 		exististencia = daoProductos.dameExistencia(Integer.parseInt(productoArreglo.get(0)), String.valueOf(productoArreglo.get(2)), String.valueOf(productoArreglo.get(3)));
 		

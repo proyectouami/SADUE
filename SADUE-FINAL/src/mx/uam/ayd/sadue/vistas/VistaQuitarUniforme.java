@@ -7,18 +7,23 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JDialog;
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
+
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
 import javax.swing.ListSelectionModel;
 import javax.swing.JLabel;
 
+import mx.uam.ayd.sadue.datos.ConexionDB;
 import mx.uam.ayd.sadue.fonts.CustomFont;
 import mx.uam.ayd.sadue.modelo.Escuela;
 import mx.uam.ayd.sadue.modelo.Producto;
 import mx.uam.ayd.sadue.negocio.ServicioQuitarUniforme;
+
 import javax.swing.JComboBox;
 import javax.swing.SwingConstants;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -29,6 +34,7 @@ public class VistaQuitarUniforme extends JDialog {
 	/**
 	 * 
 	 */
+	ConexionDB conexion;
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JScrollPane jScrollPane1;
@@ -45,7 +51,8 @@ public class VistaQuitarUniforme extends JDialog {
 	/**
 	 * Create the frame.
 	 */
-	public VistaQuitarUniforme(final ServicioQuitarUniforme servicio) {
+	public VistaQuitarUniforme(final ServicioQuitarUniforme servicio,ConexionDB cone) {
+		conexion=cone;
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setModal(true);
 		setTitle("Quitar Uniformes");
@@ -81,7 +88,7 @@ public class VistaQuitarUniforme extends JDialog {
 				for(int i=0; i < 6; i++){
 					prod += table.getValueAt(table.getSelectedRow(), i) + ",";
 				}
-				servicioQU = new ServicioQuitarUniforme(null);
+				servicioQU = new ServicioQuitarUniforme(null,conexion);
 				System.out.println(prod);
 				servicioQU.quitarProducto(prod);
 				model.removeRow(table.getSelectedRow());

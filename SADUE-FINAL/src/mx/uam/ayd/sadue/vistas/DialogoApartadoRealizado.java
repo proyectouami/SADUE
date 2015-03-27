@@ -13,16 +13,18 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import mx.uam.ayd.sadue.datos.ConexionDB;
 import mx.uam.ayd.sadue.fonts.CustomFont;
 
 public class DialogoApartadoRealizado extends JDialog {
-
+	ConexionDB conexion;
 	private VistaApartar vap;
 
 	/**
 	 * Create the dialog.
 	 */
-	public DialogoApartadoRealizado() {
+	public DialogoApartadoRealizado(ConexionDB cone) {
+		conexion=cone;
 		setTitle("Apartado Realizado");
 		getContentPane().setBackground(Color.DARK_GRAY);
 		setBounds(100, 100, 534, 310);
@@ -32,7 +34,7 @@ public class DialogoApartadoRealizado extends JDialog {
 		setLocationRelativeTo(null);
 		
 		CustomFont cf = new CustomFont();
-		vap = new VistaApartar(null);
+		vap = new VistaApartar(null,conexion);
 
 		getContentPane().setLayout(null);
 		{

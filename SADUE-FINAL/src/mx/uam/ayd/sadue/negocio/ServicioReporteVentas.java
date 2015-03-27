@@ -4,6 +4,7 @@ package mx.uam.ayd.sadue.negocio;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
+import mx.uam.ayd.sadue.datos.ConexionDB;
 import mx.uam.ayd.sadue.datos.DAOApartados;
 import mx.uam.ayd.sadue.datos.DAOProductosVentidos;
 import mx.uam.ayd.sadue.datos.DAOVenta;
@@ -17,7 +18,8 @@ import mx.uam.ayd.sadue.vistas.VistaConsultarAlmacen;
 import mx.uam.ayd.sadue.vistas.VistaReporteVentas;
 
 public class ServicioReporteVentas {
-	private DAOProductosVentidos productosv = new DAOProductosVentidos();
+	ConexionDB conexion;
+	private DAOProductosVentidos productosv = new DAOProductosVentidos(conexion);
 	private ProductoVentido productov;
 	private ArrayList<String> apartadoArreglo = new ArrayList<String>(4);
 	

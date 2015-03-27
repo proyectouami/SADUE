@@ -10,8 +10,12 @@ import mx.uam.ayd.sadue.modelo.Producto;
 import mx.uam.ayd.sadue.modelo.ProductoApartado;
 
 public class DAOProductosApartados {
+	ConexionDB conexion;
+	private String query;
+	private ResultSet rs;
 
-	public DAOProductosApartados() {
+	public DAOProductosApartados(ConexionDB cone) {
+		conexion=cone;
 		// TODO Auto-generated constructor stub
 	}
 
@@ -25,12 +29,16 @@ public class DAOProductosApartados {
 
 		try {
 			// Crea el statement
-			Statement statement = ManejadorBD.dameConnection().createStatement();
-
+			//Statement statement = ManejadorBD.dameConnection().createStatement();
+			query="insert into ProductosApartados values ("+apartado.dameId()+","+producto.dameIdProducto()+",'"+producto.dameNombreProducto()+"',"+producto.damePrecio()+
+					",'"+producto.dameTalla()+"','"+producto.dameEscuela()+"',"+producto.dameCantidad()+")";
 			// Envia instruccion SQL, nota el DEFAULT es para insertar la llave autogenerada
-			statement.execute("insert into ProductosApartados values ("+apartado.dameId()+","+producto.dameIdProducto()+",'"+producto.dameNombreProducto()+"',"+producto.damePrecio()+
-					",'"+producto.dameTalla()+"','"+producto.dameEscuela()+"',"+producto.dameCantidad()+")",Statement.RETURN_GENERATED_KEYS);
-			ResultSet rs = statement.getGeneratedKeys(); // Recupera la llave
+			//statement.execute("insert into ProductosApartados values ("+apartado.dameId()+","+producto.dameIdProducto()+",'"+producto.dameNombreProducto()+"',"+producto.damePrecio()+
+			//		",'"+producto.dameTalla()+"','"+producto.dameEscuela()+"',"+producto.dameCantidad()+")",Statement.RETURN_GENERATED_KEYS);
+			//ResultSet rs = statement.getGeneratedKeys(); // Recupera la llave
+			conexion.ejecutarSQL(query);
+			query="select * from Apartados";
+			rs=conexion.ejecutarSQLSelect(query);
 			if (rs != null && rs.next()) {
 			    llave = rs.getInt(1);
 			    producto.cambiaId(llave); // Asigna la llave al producto
@@ -51,23 +59,15 @@ public class DAOProductosApartados {
 	public boolean quitaProducto(Apartado apartado) {
 
 		int resultado = 0;
+		boolean valida;
 
-		try {
-			// Crea el statement
-			Statement statement = ManejadorBD.dameConnection().createStatement();
-
-			// Recibe los resutados
-			resultado = statement.executeUpdate("DELETE FROM ProductosApartados WHERE apartadoId="+apartado.dameId());
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		if(resultado == 0) {
-			return false;
-		} else {
-			return true;
-		}
+		// Crea el statement
+		//Statement statement = ManejadorBD.dameConnection().createStatement();
+		query="DELETE FROM ProductosApartados WHERE apartadoId="+apartado.dameId();
+		// Recibe los resutados
+		//resultado = statement.executeUpdate("DELETE FROM ProductosApartados WHERE apartadoId="+apartado.dameId());
+		valida=conexion.ejecutarSQL(query);
+		return valida;
 
 	}
 
@@ -77,11 +77,11 @@ public class DAOProductosApartados {
 
 		try {
 			// Crea el statement
-			Statement statement = ManejadorBD.dameConnection().createStatement();
-
+			//Statement statement = ManejadorBD.dameConnection().createStatement();
+			query="SELECT * FROM ProductosApartados WHERE nombre='"+id+"' AND escuela='"+escuela+"'";
 			// Recibe los resutados
-			ResultSet rs = statement.executeQuery("SELECT * FROM ProductosApartados WHERE nombre='"+id+"' AND escuela='"+escuela+"'");
-
+			//ResultSet rs = statement.executeQuery("SELECT * FROM ProductosApartados WHERE nombre='"+id+"' AND escuela='"+escuela+"'");
+			rs=conexion.ejecutarSQLSelect(query);
 			if(rs.next())
 			{
 				// Crea una nueva instancia del objeto
@@ -100,11 +100,11 @@ public class DAOProductosApartados {
 
 		try {
 			// Crea el statement
-			Statement statement = ManejadorBD.dameConnection().createStatement();
-
+			//Statement statement = ManejadorBD.dameConnection().createStatement();
+			query="SELECT * FROM ProductosApartados WHERE productoId="+id+" AND escuela='"+escuela+"' AND talla='" + talla + "'";
 			// Recibe los resutados
-			ResultSet rs = statement.executeQuery("SELECT * FROM ProductosApartados WHERE productoId="+id+" AND escuela='"+escuela+"' AND talla='" + talla + "'");
-
+			//ResultSet rs = statement.executeQuery("SELECT * FROM ProductosApartados WHERE productoId="+id+" AND escuela='"+escuela+"' AND talla='" + talla + "'");
+			rs=conexion.ejecutarSQLSelect(query);
 			if(rs.next())
 			{
 				// Crea una nueva instancia del objeto
@@ -129,11 +129,11 @@ public class DAOProductosApartados {
 
 		try {
 			// Crea el statement
-			Statement statement = ManejadorBD.dameConnection().createStatement();
-
+			//Statement statement = ManejadorBD.dameConnection().createStatement();
+			query="SELECT * FROM ProductosApartados WHERE escuela='"+escuela+"'";
 			// Recibe los resutados
-			ResultSet rs = statement.executeQuery("SELECT * FROM ProductosApartados WHERE escuela='"+escuela+"'");
-
+			//ResultSet rs = statement.executeQuery("SELECT * FROM ProductosApartados WHERE escuela='"+escuela+"'");
+			rs=conexion.ejecutarSQLSelect(query);
 			if(rs.next())
 			{
 				// Crea una nueva instancia del objeto
@@ -152,11 +152,11 @@ public class DAOProductosApartados {
 
 		try {
 			// Crea el statement
-			Statement statement = ManejadorBD.dameConnection().createStatement();
-
+			//Statement statement = ManejadorBD.dameConnection().createStatement();
+			query="SELECT * FROM ProductosApartados WHERE productoId="+id;
 			// Recibe los resutados
-			ResultSet rs = statement.executeQuery("SELECT * FROM ProductosApartados WHERE productoId="+id);
-
+			//ResultSet rs = statement.executeQuery("SELECT * FROM ProductosApartados WHERE productoId="+id);
+			rs=conexion.ejecutarSQLSelect(query);
 			if(rs.next())
 			{
 				// Crea una nueva instancia del objeto
@@ -180,11 +180,11 @@ public class DAOProductosApartados {
 
 		try {
 			// Crea el statement
-			Statement statement = ManejadorBD.dameConnection().createStatement();
-
+			//Statement statement = ManejadorBD.dameConnection().createStatement();
+			query="SELECT * FROM ProductosApartados";
 			// Recibe los resutados
-			ResultSet rs = statement.executeQuery("SELECT * FROM ProductosApartados");
-
+			//ResultSet rs = statement.executeQuery("SELECT * FROM ProductosApartados");
+			rs=conexion.ejecutarSQLSelect(query);
 			while(rs.next())
 			{
 				// Crea una nueva instancia del objeto
@@ -208,11 +208,11 @@ public class DAOProductosApartados {
 
 		try {
 			// Crea el statement
-			Statement statement = ManejadorBD.dameConnection().createStatement();
-
+			//Statement statement = ManejadorBD.dameConnection().createStatement();
+			query="SELECT * FROM ProductosApartados WHERE apartadoId=" + apartado.dameId() + " ORDER BY productoId ASC";
 			// Recibe los resutados
-			ResultSet rs = statement.executeQuery("SELECT * FROM ProductosApartados WHERE apartadoId=" + apartado.dameId() + " ORDER BY productoId ASC");
-
+			//ResultSet rs = statement.executeQuery("SELECT * FROM ProductosApartados WHERE apartadoId=" + apartado.dameId() + " ORDER BY productoId ASC");
+			rs=conexion.ejecutarSQLSelect(query);
 			while(rs.next())
 			{
 				// Crea una nueva instancia del objeto
@@ -236,11 +236,11 @@ public class DAOProductosApartados {
 
 		try {
 			// Crea el statement
-			Statement statement = ManejadorBD.dameConnection().createStatement();
-
+			//Statement statement = ManejadorBD.dameConnection().createStatement();
+			query="SELECT * FROM ProductosApartados WHERE apartadoId=" + id;
 			// Recibe los resutados
-			ResultSet rs = statement.executeQuery("SELECT * FROM ProductosApartados WHERE apartadoId=" + id);
-
+			//ResultSet rs = statement.executeQuery("SELECT * FROM ProductosApartados WHERE apartadoId=" + id);
+			rs=conexion.ejecutarSQLSelect(query);
 			while(rs.next())
 			{
 				// Crea una nueva instancia del objeto
@@ -266,10 +266,11 @@ public class DAOProductosApartados {
 	public int cuantosProductos() {
 		try {
 			// Crea el statement
-			Statement statement = ManejadorBD.dameConnection().createStatement();
-
+			//Statement statement = ManejadorBD.dameConnection().createStatement();
+			query="SELECT COUNT(*) FROM ProductosApartados";
 			// Recibe los resutados
-			ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM ProductosApartados");
+			//ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM ProductosApartados");
+			rs=conexion.ejecutarSQLSelect(query);
 			if (rs.next()) {
 		        return rs.getInt(1);
 		    }

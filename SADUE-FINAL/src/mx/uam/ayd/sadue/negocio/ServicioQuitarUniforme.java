@@ -9,20 +9,21 @@ import mx.uam.ayd.sadue.vistas.VistaQuitarUniforme;
 import mx.uam.ayd.sadue.datos.*;
 
 public class ServicioQuitarUniforme {
-	
-	private DAOProductos p = new DAOProductos();
-	private DAOEscuelas escuelas = new DAOEscuelas();
+	ConexionDB conexion;
+	private DAOProductos p = new DAOProductos(conexion);
+	private DAOEscuelas escuelas = new DAOEscuelas(conexion);
 	private Producto producto;
 	private ArrayList<String> productoArreglo = new ArrayList<String>(4);
 	
-	public ServicioQuitarUniforme(DAOProductos p) {
+	public ServicioQuitarUniforme(DAOProductos p,ConexionDB cone) {
 		// TODO Auto-generated constructor stub
+		conexion=cone;
 		this.p = p;
 	}
 	
 	public void inicia(){
 		System.out.println("Metodo que inicia la VistaQuitarUniforme");
-		VistaQuitarUniforme ventana = new VistaQuitarUniforme(this);
+		VistaQuitarUniforme ventana = new VistaQuitarUniforme(this,conexion);
 		ventana.setVisible(true);
 	}
 	
@@ -49,7 +50,7 @@ public class ServicioQuitarUniforme {
 		
 		producto = new Producto(Integer.parseInt(productoArreglo.get(0)),String.valueOf(productoArreglo.get(1)), Double.parseDouble(productoArreglo.get(2)),
 				String.valueOf(productoArreglo.get(3)), String.valueOf(productoArreglo.get(4)), Integer.parseInt((productoArreglo.get(5))));
-		p = new DAOProductos();
+		p = new DAOProductos(conexion);
 		if(p.quitaProducto(producto))
 			return true;
 		else

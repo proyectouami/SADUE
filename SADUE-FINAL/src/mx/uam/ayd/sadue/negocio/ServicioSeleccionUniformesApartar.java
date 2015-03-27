@@ -3,6 +3,7 @@ package mx.uam.ayd.sadue.negocio;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
+import mx.uam.ayd.sadue.datos.ConexionDB;
 import mx.uam.ayd.sadue.datos.DAOApartados;
 import mx.uam.ayd.sadue.datos.DAOEscuelas;
 import mx.uam.ayd.sadue.datos.DAOProductos;
@@ -11,21 +12,22 @@ import mx.uam.ayd.sadue.modelo.Producto;
 import mx.uam.ayd.sadue.vistas.VistaSeleccionUniformesApartar;
 
 public class ServicioSeleccionUniformesApartar {
-	
-	private DAOApartados apartados = new DAOApartados();
-	private DAOProductos productos = new DAOProductos();
-	private DAOEscuelas escuelas = new DAOEscuelas();
+	ConexionDB conexion;
+	private DAOApartados apartados = new DAOApartados(conexion);
+	private DAOProductos productos = new DAOProductos(conexion);
+	private DAOEscuelas escuelas = new DAOEscuelas(conexion);
 	private Producto[] listaTemporal;
 	private Producto producto;
 	
-	public ServicioSeleccionUniformesApartar(DAOApartados a) {
+	public ServicioSeleccionUniformesApartar(DAOApartados a,ConexionDB cone) {
 		// TODO Auto-generated constructor stub
+		conexion=cone;
 		this.apartados = a;
 	}
 	
 	public void inicia(){
 		System.out.println("Metodo que inicia la VistaSeleccionUniformesApartar");
-		VistaSeleccionUniformesApartar ventana = new VistaSeleccionUniformesApartar(this);
+		VistaSeleccionUniformesApartar ventana = new VistaSeleccionUniformesApartar(this,conexion);
 		ventana.setVisible(true);
 	}
 	

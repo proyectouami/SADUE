@@ -11,13 +11,17 @@ import mx.uam.ayd.sadue.modelo.ProductoApartado;
 import mx.uam.ayd.sadue.modelo.ProductoVentido;
 
 public class DAOProductosVentidos {
+		ConexionDB conexion;
+		private String query;
+		private ResultSet rs;
 
-	public DAOProductosVentidos() {
+	public DAOProductosVentidos(ConexionDB cone) {
+		conexion=cone;
 		// TODO Auto-generated constructor stub
 	}
 
 	/**
-	 * Permite agregar un material a la librer’a
+	 * Permite agregar un material a la librerï¿½a
 	 * @return true si el material se agrego exitosamente, false sino
 	 */
 	public boolean agregaProducto(ProductoVentido pVentido) {
@@ -26,12 +30,16 @@ public class DAOProductosVentidos {
 
 		try {
 			// Crea el statement
-			Statement statement = ManejadorBD.dameConnection().createStatement();
-
+			//Statement statement = ManejadorBD.dameConnection().createStatement();
+			query="insert into ProductosVendidos values ("+pVentido.dameIdVenta()+","+pVentido.dameIdProducto()+",'"+pVentido.dameNombreProducto()+"',"+pVentido.damePrecio()+
+					",'"+pVentido.dameTalla()+"','"+pVentido.dameEscuela()+"',"+pVentido.dameCantidad()+")";
 			// Envia instruccion SQL, nota el DEFAULT es para insertar la llave autogenerada
-			statement.execute("insert into ProductosVendidos values ("+pVentido.dameIdVenta()+","+pVentido.dameIdProducto()+",'"+pVentido.dameNombreProducto()+"',"+pVentido.damePrecio()+
-					",'"+pVentido.dameTalla()+"','"+pVentido.dameEscuela()+"',"+pVentido.dameCantidad()+")",Statement.RETURN_GENERATED_KEYS);
-			ResultSet rs = statement.getGeneratedKeys(); // Recupera la llave
+			//statement.execute("insert into ProductosVendidos values ("+pVentido.dameIdVenta()+","+pVentido.dameIdProducto()+",'"+pVentido.dameNombreProducto()+"',"+pVentido.damePrecio()+
+			//		",'"+pVentido.dameTalla()+"','"+pVentido.dameEscuela()+"',"+pVentido.dameCantidad()+")",Statement.RETURN_GENERATED_KEYS);
+			//ResultSet rs = statement.getGeneratedKeys(); // Recupera la llave
+			conexion.ejecutarSQL(query);
+			query="select * from Apartados";
+			rs=conexion.ejecutarSQLSelect(query);
 			if (rs != null && rs.next()) {
 			    llave = rs.getInt(1);
 			    pVentido.cambiaId(llave); // Asigna la llave al producto
@@ -46,7 +54,7 @@ public class DAOProductosVentidos {
 	}
 
 	/**
-	 * Permite quitar un material a la librer’a
+	 * Permite quitar un material a la librerï¿½a
 	 * @return true si el material se quito exitosamente, false sino
 	 */
 /*	public boolean quitaProducto(Apartado apartado) {
@@ -78,11 +86,11 @@ public class DAOProductosVentidos {
 
 		try {
 			// Crea el statement
-			Statement statement = ManejadorBD.dameConnection().createStatement();
-
+			//Statement statement = ManejadorBD.dameConnection().createStatement();
+			query="SELECT * FROM ProductosApartados WHERE nombre='"+id+"' AND escuela='"+escuela+"'";
 			// Recibe los resutados
-			ResultSet rs = statement.executeQuery("SELECT * FROM ProductosApartados WHERE nombre='"+id+"' AND escuela='"+escuela+"'");
-
+			//ResultSet rs = statement.executeQuery("SELECT * FROM ProductosApartados WHERE nombre='"+id+"' AND escuela='"+escuela+"'");
+			rs=conexion.ejecutarSQLSelect(query);
 			if(rs.next())
 			{
 				// Crea una nueva instancia del objeto
@@ -101,11 +109,11 @@ public class DAOProductosVentidos {
 
 		try {
 			// Crea el statement
-			Statement statement = ManejadorBD.dameConnection().createStatement();
-
+			//Statement statement = ManejadorBD.dameConnection().createStatement();
+			query="SELECT * FROM ProductosApartados WHERE productoId="+id+" AND escuela='"+escuela+"' AND talla='" + talla + "'";
 			// Recibe los resutados
-			ResultSet rs = statement.executeQuery("SELECT * FROM ProductosApartados WHERE productoId="+id+" AND escuela='"+escuela+"' AND talla='" + talla + "'");
-
+			//ResultSet rs = statement.executeQuery("SELECT * FROM ProductosApartados WHERE productoId="+id+" AND escuela='"+escuela+"' AND talla='" + talla + "'");
+			rs=conexion.ejecutarSQLSelect(query);
 			if(rs.next())
 			{
 				// Crea una nueva instancia del objeto
@@ -130,11 +138,11 @@ public class DAOProductosVentidos {
 
 		try {
 			// Crea el statement
-			Statement statement = ManejadorBD.dameConnection().createStatement();
-
+			//Statement statement = ManejadorBD.dameConnection().createStatement();
+			query="SELECT * FROM ProductosApartados WHERE escuela='"+escuela+"'";
 			// Recibe los resutados
-			ResultSet rs = statement.executeQuery("SELECT * FROM ProductosApartados WHERE escuela='"+escuela+"'");
-
+			//ResultSet rs = statement.executeQuery("SELECT * FROM ProductosApartados WHERE escuela='"+escuela+"'");
+			rs=conexion.ejecutarSQLSelect(query);
 			if(rs.next())
 			{
 				// Crea una nueva instancia del objeto
@@ -153,11 +161,11 @@ public class DAOProductosVentidos {
 
 		try {
 			// Crea el statement
-			Statement statement = ManejadorBD.dameConnection().createStatement();
-
+			//Statement statement = ManejadorBD.dameConnection().createStatement();
+			query="SELECT * FROM ProductosApartados WHERE productoId="+id;
 			// Recibe los resutados
-			ResultSet rs = statement.executeQuery("SELECT * FROM ProductosApartados WHERE productoId="+id);
-
+			//ResultSet rs = statement.executeQuery("SELECT * FROM ProductosApartados WHERE productoId="+id);
+			rs=conexion.ejecutarSQLSelect(query);
 			if(rs.next())
 			{
 				// Crea una nueva instancia del objeto
@@ -181,11 +189,11 @@ public class DAOProductosVentidos {
 
 		try {
 			// Crea el statement
-			Statement statement = ManejadorBD.dameConnection().createStatement();
-
+			//Statement statement = ManejadorBD.dameConnection().createStatement();
+			query="SELECT * FROM ProductosApartados";
 			// Recibe los resutados
-			ResultSet rs = statement.executeQuery("SELECT * FROM ProductosApartados");
-
+			//ResultSet rs = statement.executeQuery("SELECT * FROM ProductosApartados");
+			rs=conexion.ejecutarSQLSelect(query);
 			while(rs.next())
 			{
 				// Crea una nueva instancia del objeto
@@ -209,11 +217,11 @@ public class DAOProductosVentidos {
 
 		try {
 			// Crea el statement
-			Statement statement = ManejadorBD.dameConnection().createStatement();
-
+			//Statement statement = ManejadorBD.dameConnection().createStatement();
+			query="SELECT * FROM ProductosApartados WHERE apartadoId=" + apartado.dameId() + " ORDER BY productoId ASC";
 			// Recibe los resutados
-			ResultSet rs = statement.executeQuery("SELECT * FROM ProductosApartados WHERE apartadoId=" + apartado.dameId() + " ORDER BY productoId ASC");
-
+			//ResultSet rs = statement.executeQuery("SELECT * FROM ProductosApartados WHERE apartadoId=" + apartado.dameId() + " ORDER BY productoId ASC");
+			rs=conexion.ejecutarSQLSelect(query);
 			while(rs.next())
 			{
 				// Crea una nueva instancia del objeto
@@ -237,11 +245,11 @@ public class DAOProductosVentidos {
 
 		try {
 			// Crea el statement
-			Statement statement = ManejadorBD.dameConnection().createStatement();
-
+			//Statement statement = ManejadorBD.dameConnection().createStatement();
+			query="SELECT * FROM ProductosApartados WHERE apartadoId=" + id;
 			// Recibe los resutados
-			ResultSet rs = statement.executeQuery("SELECT * FROM ProductosApartados WHERE apartadoId=" + id);
-
+			//ResultSet rs = statement.executeQuery("SELECT * FROM ProductosApartados WHERE apartadoId=" + id);
+			rs=conexion.ejecutarSQLSelect(query);
 			while(rs.next())
 			{
 				// Crea una nueva instancia del objeto
@@ -267,10 +275,11 @@ public class DAOProductosVentidos {
 	public int cuantosProductos() {
 		try {
 			// Crea el statement
-			Statement statement = ManejadorBD.dameConnection().createStatement();
-
+			//Statement statement = ManejadorBD.dameConnection().createStatement();
+			query="SELECT COUNT(*) FROM ProductosApartados";
 			// Recibe los resutados
-			ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM ProductosApartados");
+			//ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM ProductosApartados");
+			rs=conexion.ejecutarSQLSelect(query);
 			if (rs.next()) {
 		        return rs.getInt(1);
 		    }

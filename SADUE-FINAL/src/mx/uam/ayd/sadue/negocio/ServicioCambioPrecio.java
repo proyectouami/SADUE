@@ -1,11 +1,12 @@
 package mx.uam.ayd.sadue.negocio;
 
+import mx.uam.ayd.sadue.datos.ConexionDB;
 import mx.uam.ayd.sadue.datos.DAOProductos;
 import mx.uam.ayd.sadue.modelo.Producto;
 import mx.uam.ayd.sadue.vistas.VistaCambioPrecio;
 
 public class ServicioCambioPrecio {
-	
+	ConexionDB conexion;
 	DAOProductos p;
 	private Producto producto;
 	private int id;
@@ -14,8 +15,9 @@ public class ServicioCambioPrecio {
 	private String talla;
 	private int cantidad;
 	
-	public ServicioCambioPrecio(DAOProductos dao) {
+	public ServicioCambioPrecio(DAOProductos dao,ConexionDB cone) {
 		// TODO Auto-generated constructor stub
+		conexion=cone;
 		p = dao;
 	}
 	
@@ -37,7 +39,7 @@ public class ServicioCambioPrecio {
 		
 		//se crea un objeto producto
 		producto = new Producto(id, uniforme, precio, talla, escuela, cantidad);
-		p = new DAOProductos();
+		p = new DAOProductos(conexion);
 		if(p.cambiaPrecio(producto))
 			return true;
 		else

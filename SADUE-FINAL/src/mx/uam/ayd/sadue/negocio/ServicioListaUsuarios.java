@@ -3,23 +3,25 @@ package mx.uam.ayd.sadue.negocio;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
+import mx.uam.ayd.sadue.datos.ConexionDB;
 import mx.uam.ayd.sadue.datos.DAOUsuarios;
 import mx.uam.ayd.sadue.modelo.Usuario;
 import mx.uam.ayd.sadue.vistas.DialogoListaUsuarios;
 
 public class ServicioListaUsuarios {
-	
+	ConexionDB conexion;
 	private DAOUsuarios usuarios;
 	private Usuario usr;
 	private ArrayList<String> usuarioArreglo = new ArrayList<String>(3);
 	
-	public ServicioListaUsuarios(DAOUsuarios usuario){
+	public ServicioListaUsuarios(DAOUsuarios usuario,ConexionDB cone){
+		conexion=cone;
 		this.usuarios = usuario;
 	}
 	
 	public void inicia(){
 		System.out.println("Metodo inicia de la clase DialogoListaUsuarios");
-		DialogoListaUsuarios ventana = new DialogoListaUsuarios(this);
+		DialogoListaUsuarios ventana = new DialogoListaUsuarios(this,conexion);
 		ventana.setVisible(true); // En este momento aparece la ventana principal
 	}
 	
@@ -45,7 +47,7 @@ public class ServicioListaUsuarios {
 		}
 		
 		usr = new Usuario(usuarioArreglo.get(0),String.valueOf(usuarioArreglo.get(1)), Integer.parseInt(usuarioArreglo.get(2)));
-		usuarios = new DAOUsuarios();
+		usuarios = new DAOUsuarios(conexion);
 		if(usuarios.quitaUsuario(usr))
 			return true;
 		else

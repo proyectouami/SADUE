@@ -46,14 +46,14 @@ public class Aplicacion {
 	//Este metodo inicializa una Nueva Venta
 		public void nuevaVenta(){
 			System.out.println("Metodo que inicia \"Nueva Venta\"");
-			ServicioNuevaVenta servicioNuevaVenta = new ServicioNuevaVenta(v);
+			ServicioNuevaVenta servicioNuevaVenta = new ServicioNuevaVenta(v,conexion);
 			servicioNuevaVenta.inicia();
 		}
 	
 	//Este metodo inicializa el Sistema de Apartado
 	public void sistemaApartado(){
 		System.out.println("Metodo que inicia \"Sistema de Apartado\"");
-		ServicioSistemaApartado servicioSistemaApartado = new ServicioSistemaApartado();
+		ServicioSistemaApartado servicioSistemaApartado = new ServicioSistemaApartado(conexion);
 		servicioSistemaApartado.inicia();
 	}
 	
@@ -75,21 +75,21 @@ public class Aplicacion {
 	//Este metodo inicializa Agregar Uniformes
 	public void agregarUniforme(){
 		System.out.println("Metodo que inicia \"Agregar Uniformes\"");
-		ServicioAgregarUniforme servicioAgregarUniforme = new ServicioAgregarUniforme(p);
+		ServicioAgregarUniforme servicioAgregarUniforme = new ServicioAgregarUniforme(p,conexion);
 		servicioAgregarUniforme.inicia();
 	}
 	
 	//Este metodo inicializa Quitar Uniformes
 	public void quitarUniforme(){
 		System.out.println("Metodo que inicia \"Quitar Uniformes\"");
-		ServicioQuitarUniforme servicioQuitarUniforme = new ServicioQuitarUniforme(p);
+		ServicioQuitarUniforme servicioQuitarUniforme = new ServicioQuitarUniforme(p,conexion);
 		servicioQuitarUniforme.inicia();
 	}
 
 	//Este metodo inicializa Consultar Inventario
 	public void consultarInventario(){
 		System.out.println("Metodo que inicia \"Consultar Inventario\"");
-		ServicioConsultarAlmacen servicioConsultarInventario = new ServicioConsultarAlmacen(p);
+		ServicioConsultarAlmacen servicioConsultarInventario = new ServicioConsultarAlmacen(p,conexion);
 		servicioConsultarInventario.inicia();
 	}
 	
@@ -127,7 +127,7 @@ public class Aplicacion {
 	
 	public void dialogoUsuarios(){
 		System.out.println("Metodo que muestra dialogo \"Lista Usuarios\"");
-		ServicioListaUsuarios servicioListaUsuarios = new ServicioListaUsuarios(u);
+		ServicioListaUsuarios servicioListaUsuarios = new ServicioListaUsuarios(u,conexion);
 		servicioListaUsuarios.inicia();
 	}
 	
@@ -139,7 +139,7 @@ public class Aplicacion {
 	
 	public void dialogoEscuelas(){
 		System.out.println("Metodo que muestra dialogo \"Lista Escuelas\"");
-		ServicioListaEscuelas servicioListaEscuelas = new ServicioListaEscuelas(e);
+		ServicioListaEscuelas servicioListaEscuelas = new ServicioListaEscuelas(e,conexion);
 		servicioListaEscuelas.inicia();
 	}
 	
